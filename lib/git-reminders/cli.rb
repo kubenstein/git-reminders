@@ -29,7 +29,7 @@ module GitReminders
     def walk
       Repo.new.all_runnable_merged_tags.each do |tag|
         puts "** reminder: #{tag.name} **\n\n"
-        puts "#{tag.executable_code}\n"
+        puts "#{tag.message}\n"
 
         unless options['no-prompt']          
           if options['archive-prompt']
@@ -62,7 +62,8 @@ module GitReminders
 
     def archive_tag(tag)
       current_time = DateTime.now.strftime('%Y_%m_%d-%H_%M')
-      Repo.new.rename_tag(tag, "done__#{current_time}__#{tag.name}")
+      new_name = "done__#{current_time}__#{tag.name}"
+      Repo.new.rename_tag(tag, new_name)
       puts "Reminder #{tag.name} archived!"
     end
 

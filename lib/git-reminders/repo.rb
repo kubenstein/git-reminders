@@ -33,7 +33,7 @@ module GitReminders
 
     def rename_tag(tag, name)
       tag_name = "#{TAG_IDENTIFIER}_#{name}"
-      Tag.create(name: tag_name, commit_hash: tag.commit_hash, executable_code: tag.executable_code).tap do |new_tag|
+      Tag.create(name: tag_name, commit_hash: tag.commit_hash, message: tag.message).tap do |new_tag|
         tag.destroy
       end
     end

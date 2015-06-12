@@ -7,7 +7,7 @@ module GitReminders
     def self.create(params = {})
       name = params[:name]
       commit_hash = params[:commit_hash]
-      executable_code = params[:executable_code]
+      message = params[:message]
       editor = params[:editor]
 
       tag_name = "#{name}_#{Time.now.to_i}"
@@ -15,7 +15,7 @@ module GitReminders
       if editor
         create_tag_with_message_from_editor(tag_name, commit_hash)
       else
-        create_tag_with_message(tag_name, commit_hash, executable_code)
+        create_tag_with_message(tag_name, commit_hash, message)
       end
     end
 
@@ -23,7 +23,7 @@ module GitReminders
       `git cat-file tag #{self.name} | grep object | cut -d" " -f2`.strip
     end
 
-    def executable_code
+    def message
       `git cat-file tag #{self.name}`.split("\n\n")[1]
     end
 
@@ -51,18 +51,6 @@ module GitReminders
       Tag.new(name)
     end
   end
-
-# gitrepo = GitRepo.new
-# gitrepo.all_runnable_merged_tags.each do |tag|
-#   puts "\n\n++++++++++++++++"
-#   puts tag.executable_code
-#   puts "++++++++++++++++"
-#   puts "archive this instruction? (Y/N)"
-#   if gets.strip == 'Y'
-#     puts "#{tag.name} archived!"
-#     gitrepo.rename_tag(tag, "done_#{tag.name}")
-#   end
-# end
 
 end
 
