@@ -9,6 +9,15 @@ Workflow
 Whenever you commit something that will need extra care during or after deployment, such as some rake task or other custom code, just make special tag. Tag's message should contain executable code you want to run.
 GitReminders will find all display all reminders that need to be run. Only reminders from merged branches will be presented.
 
+Instalation
+---------
+I will push the gem to rubygems soon, but for now you can install it using [specific_install](https://github.com/rdp/specific_install):
+
+```
+gem install specific_install
+gem specific_install -l https://github.com/kubenstein/git-reminders.git 
+```
+
 Usage
 ---------
 To create reminder under current commit:
@@ -49,6 +58,21 @@ To remove all local reminders that are not in remote use `sync` command. This co
   git reminder sync origin
 ```
 
+Internals
+---------
+Git Reminders are just annotated tags. Gem knows which tags are reminders based on tag name. In repo reminders look like:
+
+```
+valid reminder:
+rmndr_recreate_thumbnails__c2015-06-12_22-54
+
+archived reminder:
+DONE_rmndr_recreate_thumbnails__c2015-06-12_22-54__a2015-06-12_22-59
+```
+
+
 TODO
 ---------
 - [ ] change all bare git commands to some ruby git lib calls
+- [ ] push to rubygems
+- [ ] add tests and all those non-hackathon stuff
