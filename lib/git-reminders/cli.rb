@@ -48,6 +48,7 @@ module GitReminders
 
     desc 'sync REMOTE', 'Sync all reminders with remote server'
     def sync(remote)
+      Repo.new.sync(remote)
     end
 
 
