@@ -25,14 +25,11 @@ module GitReminders
       end
     end
 
-    def sync(remote)
+    def push(remote)
       # algorithm:
       # 1) fetch all tags from repo
       # 2) remove all LOCAL and REMOTE not-archived twin tags that are LOCALLY marked as archived
       # 3) push all tags back to origin
-      # !4) remove all LOCAL tags that were removed on REMOTE but somehow still are LOCALLY
-      # ! this doesnt work since in 3) we pushed all local stuff to remote again 
-      
 
       `git fetch --tags #{remote}`
       all_runnable_tags = all_tags_with_identifier(TAG_IDENTIFIER)
@@ -46,7 +43,6 @@ module GitReminders
         end
       end
       `git push --tags #{remote}`
-      `git fetch --prune #{remote} +refs/tags/*:refs/tags/*`
     end
 
     def create_tag(name)

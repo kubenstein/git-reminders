@@ -46,10 +46,14 @@ module GitReminders
     end
 
 
-    desc 'sync REMOTE', 'Sync all reminders with remote server'
-    def sync(remote)
-      Repo.new.sync(remote)
+    desc 'push REMOTE', 'Push all reminders (created or archived) to remote server. '
+    def push(remote)
+      Repo.new.push(remote)
     end
+
+    desc 'sync REMOTE', 'Cleanup all local reminders and fetch them from REMOTE again'
+    def sync(remote)
+    end    
 
 
     private 

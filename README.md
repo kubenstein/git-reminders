@@ -37,7 +37,13 @@ You can also archive reminder automatically by using `--auto-archive` flag.
   git reminder walk --archive-prompt --auto-archive
 ```
 
-To sync reminders with remote repo:
+To push reminders with remote repo. This command will push all newly created reminders as well as mark as archived on remote server reminders that were archived localy.
+
+```
+  git reminder push origin
+```
+
+To remove all local reminders that are not in remote use `sync` command. This command is DESTRUCTIVE since all you local, not pushed, both added and already marked as archived reminders will be removed.
 
 ```
   git reminder sync origin
