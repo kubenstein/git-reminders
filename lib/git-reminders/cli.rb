@@ -1,6 +1,5 @@
 
 require 'thor'
-require 'date'
 
 module GitReminders
   class Cli < Thor
@@ -61,9 +60,7 @@ module GitReminders
     end
 
     def archive_tag(tag)
-      current_time = DateTime.now.strftime('%Y_%m_%d-%H_%M')
-      new_name = "done__#{current_time}__#{tag.name}"
-      Repo.new.rename_tag(tag, new_name)
+      Repo.new.archive_tag(tag)
       puts "Reminder #{tag.name} archived!"
     end
 

@@ -10,12 +10,10 @@ module GitReminders
       message = params[:message]
       editor = params[:editor]
 
-      tag_name = "#{name}_#{Time.now.to_i}"
-
       if editor
-        create_tag_with_message_from_editor(tag_name, commit_hash)
+        create_tag_with_message_from_editor(name, commit_hash)
       else
-        create_tag_with_message(tag_name, commit_hash, message)
+        create_tag_with_message(name, commit_hash, message)
       end
     end
 

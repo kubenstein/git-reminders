@@ -1,6 +1,9 @@
+require 'date'
+
 module GitReminders
   class Repo
     TAG_IDENTIFIER = 'rmndr'
+    DONE_TAG_IDENTIFIER = 'rmndr'
 
     def current_branch
       `git branch | grep "*" | cut -d" " -f2`.strip
@@ -27,15 +30,22 @@ module GitReminders
     end
 
     def create_tag(name)
-      tag_name = "#{TAG_IDENTIFIER}_#{name}"
-      Tag.create(name: tag_name, commit_hash: self.head_commit_hash, editor: true)
+      enhanced_name = "#{TAG_IDENTIFIER}_#{name}__c#{current_time}"
+      Tag.create(name: enhanced_name, commit_hash: self.head_commit_hash, editor: true)
     end
 
-    def rename_tag(tag, name)
-      tag_name = "#{TAG_IDENTIFIER}_#{name}"
-      Tag.create(name: tag_name, commit_hash: tag.commit_hash, message: tag.message).tap do |new_tag|
+    def archive_tag(tag)
+      new_name = "#{DONE_TAG_IDENTIFIER}_#{tag.name}__a#{current_time}"
+      Tag.create(name: new_name, commit_hash: tag.commit_hash, message: tag.message).tap do |new_tag|
         tag.destroy
       end
+    end
+
+
+    private
+
+    def current_time
+      DateTime.now.strftime('%Y-%m-%d_%H-%M')
     end
     
   end
