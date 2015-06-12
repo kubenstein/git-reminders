@@ -1,13 +1,16 @@
 
 require 'thor'
+require 'date'
 
 module GitReminders
   class Cli < Thor
     default_task :list
 
+
     desc 'add NAME', 'Create reminder with given name. Reminder will be created on current head position'
     def add(name)
     end
+
 
     desc 'list', 'Display all waiting reminders valid for current branch'
     def list
@@ -16,13 +19,49 @@ module GitReminders
       end
     end
 
+
     desc 'walk', 'Display all valid reminders one by one'
-    option 'prompt-delete', type: :boolean
+    option 'no-prompt', type: :boolean
+    option 'archive-prompt', type: :boolean
+    option 'auto-archive', type: :boolean
     def walk
+      Repo.new.all_runnable_merged_tags.each do |tag|
+        puts "** reminder: #{tag.name} **\n\n"
+        puts "#{tag.executable_code}\n"
+
+        unless options['no-prompt']          
+          if options['archive-prompt']
+            archive_tag_prompt(tag)
+          else
+            STDIN.gets
+          end
+        end
+
+        if options['auto-archive']
+          archive_tag(tag)
+        end
+          
+      end
     end
+
 
     desc 'sync REMOTE', 'Sync all reminders with remote server'
     def sync(remote)
+    end
+
+
+    private 
+
+    def archive_tag_prompt(tag)
+      puts "Do you want to archive this reminder? (Y/N)"
+      input = STDIN.gets.upcase.strip
+      archive_tag(tag) if input == 'Y'
+    end
+
+    def archive_tag(tag)
+      current_time = DateTime.now.strftime('%Y_%m_%d-%H_%M')
+      Repo.new.rename_tag(tag, "done__#{current_time}__#{tag.name}")
+      puts "Reminder #{tag.name} archived!"
     end
 
   end

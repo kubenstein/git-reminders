@@ -25,11 +25,16 @@ To list all valid reminders for current commit use `list` command. This is defau
   git reminder list
 ```
 
-To display reminders one by one use `git reminder walk` command. if you want to be able to choose to set reminder as done use `--prompt-delete` flag:
+To display reminders use `git reminder walk` command. By default reminders will be presented one by one.
+If you want to skip waiting after each reminder, so display all at once use `--no-prompt` flag.
+If you want to be able to choose to archive reminder  use `--archive-prompt` flag.
+You can also archive reminder automatically by using `--auto-archive` flag.
+
 
 ```
   git reminder walk
-  git reminder walk --prompt-delete
+  git reminder walk --no-prompt --auto-archive
+  git reminder walk --archive-prompt --auto-archive
 ```
 
 To sync reminders with remote repo:
@@ -41,5 +46,4 @@ To sync reminders with remote repo:
 TODO
 ---------
 - [ ] implement add command
-- [ ] implement walk command
 - [ ] implement sync command
