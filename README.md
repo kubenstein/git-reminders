@@ -18,9 +18,10 @@ To create reminder under current commit:
   # your fav text editor opens, and you can type some instructions
 ```
 
-To list all valid reminders for current commit:
+To list all valid reminders for current commit use `list` command. This is default command.
 
 ```
+  git reminder
   git reminder list
 ```
 
@@ -39,8 +40,6 @@ To sync reminders with remote repo:
 
 TODO
 ---------
-- [ ] make gem out of poc script
 - [ ] implement add command
-- [ ] implement list command
 - [ ] implement walk command
 - [ ] implement sync command

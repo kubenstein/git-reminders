@@ -11,6 +11,9 @@ module GitReminders
 
     desc 'list', 'Display all waiting reminders valid for current branch'
     def list
+      Repo.new.all_runnable_merged_tags.each do |tag|
+        puts "#{tag.name}"
+      end
     end
 
     desc 'walk', 'Display all valid reminders one by one'
