@@ -8,13 +8,15 @@ module GitReminders
       name = params[:name]
       commit_hash = params[:commit_hash]
       executable_code = params[:executable_code]
+      editor = params[:editor]
 
-      t = Tempfile.new(name)
-      t.write(executable_code)
-      t.flush
-      `git tag -a -F #{t.path} #{name} #{commit_hash}`
-      t.close
-      Tag.new(name)
+      tag_name = "#{name}_#{Time.now.to_i}"
+
+      if editor
+        create_tag_with_message_from_editor(tag_name, commit_hash)
+      else
+        create_tag_with_message(tag_name, commit_hash, executable_code)
+      end
     end
 
     def commit_hash
@@ -31,6 +33,22 @@ module GitReminders
 
     def destroy
       `git tag -d #{self.name}`
+    end
+
+
+    private
+
+    def self.create_tag_with_message_from_editor(name, commit_hash)
+      system("git tag -a #{name} #{commit_hash}")
+    end
+
+    def self.create_tag_with_message(name, commit_hash, message)
+      t = Tempfile.new(name)
+      t.write(message)
+      t.flush
+      `git tag -a -F #{t.path} #{name} #{commit_hash}`
+      t.close
+      Tag.new(name)
     end
   end
 

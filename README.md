@@ -45,5 +45,4 @@ To sync reminders with remote repo:
 
 TODO
 ---------
-- [ ] implement add command
 - [ ] implement sync command

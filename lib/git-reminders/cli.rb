@@ -9,6 +9,8 @@ module GitReminders
 
     desc 'add NAME', 'Create reminder with given name. Reminder will be created on current head position'
     def add(name)
+      Repo.new.create_tag(name)
+      puts "Reminder has been created!"
     end
 
 
