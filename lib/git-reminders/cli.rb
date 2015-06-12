@@ -51,8 +51,9 @@ module GitReminders
       Repo.new.push(remote)
     end
 
-    desc 'sync REMOTE', 'Cleanup all local reminders and fetch them from REMOTE again'
+    desc 'sync REMOTE', 'Cleanup all local reminders and fetch them again from REMOTE server.'
     def sync(remote)
+      Repo.new.sync(remote)
     end    
 
 

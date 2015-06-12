@@ -25,6 +25,10 @@ module GitReminders
       end
     end
 
+    def sync(remote)
+      `git fetch --prune #{remote} +refs/tags/*:refs/tags/*`
+    end
+
     def push(remote)
       # algorithm:
       # 1) fetch all tags from repo

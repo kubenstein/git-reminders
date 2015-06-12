@@ -51,5 +51,4 @@ To remove all local reminders that are not in remote use `sync` command. This co
 
 TODO
 ---------
-- [ ] implement sync command
 - [ ] change all bare git commands to some ruby git lib calls
