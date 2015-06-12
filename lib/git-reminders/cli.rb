@@ -3,6 +3,7 @@ require 'thor'
 
 module GitReminders
   class Cli < Thor
+    default_task :list
 
     desc 'add NAME', 'Create reminder with given name. Reminder will be created on current head position'
     def add(name)
