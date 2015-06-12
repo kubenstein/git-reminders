@@ -46,3 +46,4 @@ To sync reminders with remote repo:
 TODO
 ---------
 - [ ] implement sync command
+- [ ] change all bare git commands to some ruby git lib calls
