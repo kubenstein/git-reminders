@@ -1,4 +1,5 @@
 require 'git-reminders/version'
+require 'git-reminders/git'
 require 'git-reminders/tag'
 require 'git-reminders/cli'
 require 'git-reminders/repo'

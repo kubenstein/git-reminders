@@ -18,36 +18,44 @@ module GitReminders
     end
 
     def commit_hash
-      `git cat-file tag #{self.name} | grep object | cut -d" " -f2`.strip
+      Git.execute("git cat-file tag #{self.name}").
+          match(/object[\s]*(?<commit_hash>[^\s]*)/)['commit_hash']
     end
 
     def message
-      `git cat-file tag #{self.name}`.split("\n\n")[1]
+      Git.execute("git cat-file tag #{self.name}").
+          split("\n\n")[1].
+          strip
     end
 
     def appeared_in_branches
-      `git branch --contains #{self.commit_hash}`.gsub('*', ' ').split("\n").map(&:strip)
+      Git.execute("git branch --contains #{self.commit_hash}").
+          gsub('*', ' ').split("\n").
+          map(&:strip).
+          reject { |branch| branch.empty? }
     end
 
     def destroy
-      `git tag -d #{self.name}`
+      Git.execute("git tag -d #{self.name}")
     end
 
 
     private
 
     def self.create_tag_with_message_from_editor(name, commit_hash)
-      system("git tag -a #{name} #{commit_hash}")
+      Kernel.system("git tag -a #{name} #{commit_hash}")
     end
 
     def self.create_tag_with_message(name, commit_hash, message)
       t = Tempfile.new(name)
       t.write(message)
       t.flush
-      `git tag -a -F #{t.path} #{name} #{commit_hash}`
+      Git.execute("git tag -a -F #{t.path} #{name} #{commit_hash}")
       t.close
       Tag.new(name)
     end
+
+
   end
 
 end
