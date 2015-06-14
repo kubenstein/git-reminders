@@ -74,7 +74,7 @@ module GitReminders
     end
 
     def self.execute(command)
-      %x["#{command}"]
+      `#{command}`
     end
   end
 end
