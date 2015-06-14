@@ -42,7 +42,19 @@ describe GitReminders::Repo do
   xit 'pushes tags to remote server' do
   end
 
-  xit 'returns all runnable merged tags' do
+  it 'returns all runnable merged tags' do
+    tag1 = instance_double(GitReminders::Tag, name: 'tag_on_master')
+    tag2 = instance_double(GitReminders::Tag, name: 'tag_on_master_also')
+    tag3 = instance_double(GitReminders::Tag, name: 'tag_NOT_on_master')
+
+    allow(GitReminders::Git).to receive(:current_branch).and_return('master')
+
+    expect(tag1).to receive(:appeared_in_branches).and_return(['master', 'branch1'])
+    expect(tag2).to receive(:appeared_in_branches).and_return(['master', 'branch2'])
+    expect(tag3).to receive(:appeared_in_branches).and_return(['branch2', 'bugfix'])
+
+    allow(subject).to receive(:all_tags_with_identifier).and_return([tag1, tag2, tag3])
+    expect(subject.all_runnable_merged_tags.map(&:name)).to eq ['tag_on_master', 'tag_on_master_also']
   end
 
 end

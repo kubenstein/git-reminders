@@ -40,7 +40,7 @@ module GitReminders
     end
 
     def self.tags_with_identifier(identifier)
-      execute("git tag -l #{identifier}*").split
+      execute("git tag -l #{identifier}*").split("\n")
     end
 
     def self.tag_commit_hash(tag_name)

@@ -20,3 +20,9 @@ GIT_BRANCHES = '
 GIT_LOG_ONE_LINE = '
 deadbeef Fix very nasy bug
 '
+
+GIT_TAGS_WITH_IDENTIFIER = '
+rmndr_tag1
+rmndr_tag2
+rmndr_tag3
+'
