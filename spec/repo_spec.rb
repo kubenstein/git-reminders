@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe GitReminders::Repo do
+  before { mock_git_responses! }
 
   it 'returns head commit hash' do
-    allow(GitReminders::Git).to receive(:head_commit).and_return(GIT_LOG_ONE_LINE)
-
     expect(subject.head_commit_hash).to eq 'deadbeef'
   end
 
@@ -46,8 +45,6 @@ describe GitReminders::Repo do
     tag1 = instance_double(GitReminders::Tag, name: 'tag_on_master')
     tag2 = instance_double(GitReminders::Tag, name: 'tag_on_master_also')
     tag3 = instance_double(GitReminders::Tag, name: 'tag_NOT_on_master')
-
-    allow(GitReminders::Git).to receive(:current_branch).and_return('master')
 
     expect(tag1).to receive(:appeared_in_branches).and_return(['master', 'branch1'])
     expect(tag2).to receive(:appeared_in_branches).and_return(['master', 'branch2'])

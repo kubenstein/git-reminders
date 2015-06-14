@@ -1,23 +1,23 @@
 require 'spec_helper'
 
 describe GitReminders::Tag do
+  before { mock_git_responses! }
   subject { GitReminders::Tag.new('test_tag') }
 
   it 'returns hash of the associated commit' do
-    expect(GitReminders::Git).to receive(:tag_commit_hash).and_return(GIT_TAG_HASH)
-
+    expect(GitReminders::Git).to receive(:tag_commit_hash)
     expect(subject.commit_hash).to eq 'c5092372c501f0a07f0ae0bdbed7a15e18787c0f'
   end
 
   it 'returns tag message' do
-    expect(GitReminders::Git).to receive(:tag_message).with(subject.name).and_return(GIT_TAG_MESSAGE)
+    expect(GitReminders::Git).to receive(:tag_message).with(subject.name)
 
     expect(subject.message).to eq 'test reminder'
   end
 
   it 'returns list of branches that contain this tag' do
     allow(subject).to receive(:commit_hash).and_return('deadbeef')
-    expect(GitReminders::Git).to receive(:branches_that_contains).with('deadbeef').and_return(['master', 'branch2'])
+    expect(GitReminders::Git).to receive(:branches_that_contains).with('deadbeef')
 
     expect(subject.appeared_in_branches).to eq ['master', 'branch2']
   end
