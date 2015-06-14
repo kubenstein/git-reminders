@@ -4,6 +4,7 @@ describe GitReminders::Repo do
   before { mock_git_responses! }
 
   it 'returns head commit hash' do
+    expect(GitReminders::GitWrapper).to receive(:head_commit_hash)
     expect(subject.head_commit_hash).to eq 'deadbeef'
   end
 

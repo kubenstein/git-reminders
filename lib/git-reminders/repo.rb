@@ -6,9 +6,7 @@ module GitReminders
     DONE_TAG_IDENTIFIER = 'DONE'
 
     def head_commit_hash
-      GitWrapper.head_commit.
-          split[0].
-          strip
+      GitWrapper.head_commit_hash
     end
 
     def all_runnable_merged_tags

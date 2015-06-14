@@ -22,12 +22,15 @@ module GitReminders
     def self.remove_remote_tag(remote, tag_name)
       execute("git push #{remote} :#{tag_name}")
     end
+
     def self.remove_local_tag(tag_name)
       execute("git tag -d #{tag_name}")
     end
 
-    def self.head_commit
-      execute('git log --oneline -n1')
+    def self.head_commit_hash
+      execute('git log --oneline -n1').
+          split[0].
+          strip
     end
 
     def self.current_branch
