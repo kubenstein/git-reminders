@@ -1,7 +1,7 @@
 require 'date'
 
 module GitReminders
-  class Git
+  class GitWrapper
 
     def self.branches_that_contains(commit_hash)
       execute("git branch --contains #{commit_hash}").

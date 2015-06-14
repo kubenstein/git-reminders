@@ -18,30 +18,30 @@ module GitReminders
     end
 
     def commit_hash
-      Git.tag_commit_hash(self.name)
+      GitWrapper.tag_commit_hash(self.name)
     end
 
     def message
-      Git.tag_message(self.name)
+      GitWrapper.tag_message(self.name)
     end
 
     def appeared_in_branches
-      Git.branches_that_contains(self.commit_hash)
+      GitWrapper.branches_that_contains(self.commit_hash)
     end
 
     def destroy
-      Git.destroy_tag(self.name)
+      GitWrapper.destroy_tag(self.name)
     end
 
 
     private
 
     def self.create_tag_with_message_from_editor(name, commit_hash)
-      Git.create_tag_with_message_from_editor(name, commit_hash)
+      GitWrapper.create_tag_with_message_from_editor(name, commit_hash)
     end
 
     def self.create_tag_with_message(name, commit_hash, message)
-      Git.create_tag_with_message(name, commit_hash, message)
+      GitWrapper.create_tag_with_message(name, commit_hash, message)
       Tag.new(name)
     end
 

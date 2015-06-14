@@ -9,7 +9,7 @@ describe GitReminders::Repo do
 
 
   it 'sync local tag with remote once, local can be destroyed' do
-    expect(GitReminders::Git).to receive(:fetch_prune_tags).with('origin')
+    expect(GitReminders::GitWrapper).to receive(:fetch_prune_tags).with('origin')
 
     subject.sync('origin')
   end
