@@ -5,25 +5,20 @@ module GitReminders
     TAG_IDENTIFIER = 'rmndr'
     DONE_TAG_IDENTIFIER = 'DONE'
 
-    def current_branch
-      Git.execute("git branch").
-          match(/^[\*][\s*](?<current_branch>[^\n]*)/)['current_branch']
-    end
-
     def head_commit_hash
-      Git.execute("git log --oneline -n1").
+      Git.head_commit.
           split[0].
           strip
     end
 
     def all_runnable_merged_tags
       all_tags_with_identifier(TAG_IDENTIFIER).select do |tag|
-        tag.appeared_in_branches.include?(current_branch)
+        tag.appeared_in_branches.include?(Git.current_branch)
       end
     end
 
     def sync(remote)
-      Git.execute("git fetch --prune #{remote} +refs/tags/*:refs/tags/*")
+      Git.fetch_prune_tags(remote)
     end
 
     def push(remote)
@@ -32,18 +27,18 @@ module GitReminders
       # 2) remove all LOCAL and REMOTE not-archived twin tags that are LOCALLY marked as archived
       # 3) push all tags back to origin
 
-      Git.execute("git fetch --tags #{remote}")
+      Git.fetch_tags(remote)
       all_runnable_tags = all_tags_with_identifier(TAG_IDENTIFIER)
 
       all_tags_with_identifier(DONE_TAG_IDENTIFIER).each do |done_tag|
         all_runnable_tags.each do |tag_before_archiving|
           if done_tag.name =~ /#{tag_before_archiving.name}/
-            Git.execute("git push #{remote} :#{tag_before_archiving.name}")
-            Git.execute("git tag -d #{tag_before_archiving.name}")
+            Git.remove_remote_tag(remote, tag_before_archiving.name)
+            Git.remove_local_tag(tag_before_archiving.name)
           end
         end
       end
-      Git.execute("git push --tags #{remote}")
+      Git.push_tags(remote)
     end
 
     def create_tag(name)
@@ -62,7 +57,7 @@ module GitReminders
     private
 
     def all_tags_names_with_identifier(identifier)
-      Git.execute("git tag -l #{identifier}*").split
+      Git.tags_with_identifier(identifier)
     end
 
     def all_tags_with_identifier(identifier)
