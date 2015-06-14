@@ -1,4 +1,4 @@
-GitReminders (POC)
+GitReminders (POC) [![Build Status](https://travis-ci.org/kubenstein/git-reminders.png?branch=master)](https://travis-ci.org/kubenstein/git-reminders)
 =============
 
 Store temporary reminders in your git repo. Main goal is to provide some mechanism to store and then easily find all deployment instructions that need to be run.
