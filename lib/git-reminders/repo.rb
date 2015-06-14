@@ -6,17 +6,14 @@ module GitReminders
     DONE_TAG_IDENTIFIER = 'DONE'
 
     def current_branch
-      `git branch | grep "*" | cut -d" " -f2`.strip
+      Git.execute("git branch").
+          match(/^[\*][\s*](?<current_branch>[^\n]*)/)['current_branch']
     end
 
     def head_commit_hash
-      `git log --oneline -n1 | cut -d" " -f1`.strip
-    end
-
-    def all_tags_with_identifier(identifier)
-      all_tags_names_with_identifier(identifier).map do |name|
-        Tag.new(name)
-      end
+      Git.execute("git log --oneline -n1").
+          split[0].
+          strip
     end
 
     def all_runnable_merged_tags
@@ -26,7 +23,7 @@ module GitReminders
     end
 
     def sync(remote)
-      `git fetch --prune #{remote} +refs/tags/*:refs/tags/*`
+      Git.execute("git fetch --prune #{remote} +refs/tags/*:refs/tags/*")
     end
 
     def push(remote)
@@ -35,18 +32,18 @@ module GitReminders
       # 2) remove all LOCAL and REMOTE not-archived twin tags that are LOCALLY marked as archived
       # 3) push all tags back to origin
 
-      `git fetch --tags #{remote}`
+      Git.execute("git fetch --tags #{remote}")
       all_runnable_tags = all_tags_with_identifier(TAG_IDENTIFIER)
 
       all_tags_with_identifier(DONE_TAG_IDENTIFIER).each do |done_tag|
         all_runnable_tags.each do |tag_before_archiving|
           if done_tag.name =~ /#{tag_before_archiving.name}/
-            `git push #{remote} :#{tag_before_archiving.name}`
-            `git tag -d #{tag_before_archiving.name}`
+            Git.execute("git push #{remote} :#{tag_before_archiving.name}")
+            Git.execute("git tag -d #{tag_before_archiving.name}")
           end
         end
       end
-      `git push --tags #{remote}`
+      Git.execute("git push --tags #{remote}")
     end
 
     def create_tag(name)
@@ -65,7 +62,13 @@ module GitReminders
     private
 
     def all_tags_names_with_identifier(identifier)
-      `git tag -l #{identifier}*`.split
+      Git.execute("git tag -l #{identifier}*").split
+    end
+
+    def all_tags_with_identifier(identifier)
+      all_tags_names_with_identifier(identifier).map do |name|
+        Tag.new(name)
+      end
     end
 
     def current_time

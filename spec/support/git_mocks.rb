@@ -11,3 +11,13 @@ GIT_TAG_CONTAINED_IN_BRANCHES = '
 * master
   branch2
 '
+
+GIT_BRANCHES = '
+  branch1
+  branch2
+* master
+'
+
+GIT_LOG_ONE_LINE = '
+deadbeef Fix very nasy bug
+'
